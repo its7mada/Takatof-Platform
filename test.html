@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .order-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        .status-pending {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .status-accepted {
+            background-color: #d1e7dd;
+            color: #0f5132;
+        }
+        .status-rejected {
+            background-color: #f8d7da;
+            color: #842029;
+        }
+        .order-row:hover {
+            background-color: #f8f9fa;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid py-4">
+        <h1 class="mb-4">Incoming Orders</h1>
+        
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Orders List</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Items</th>
+                                <th>Total Price</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center py-4">
+                                    <div class="spinner-border text-primary" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="mt-2">Loading orders...</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-labelledby="orderDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="orderDetailsModalLabel">Order Details</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Customer Information</h5>
+                            <hr>
+                            <div class="mb-3">
+                                <p><strong>Name:</strong> <span id="customerName"></span></p>
+                                <p><strong>Phone:</strong> <span id="customerPhone"></span></p>
+                                <p><strong>Address:</strong> <span id="customerAddress"></span></p>
+                                <p><strong>City:</strong> <span id="customerCity"></span></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Order Information</h5>
+                            <hr>
+                            <div class="mb-3">
+                                <p><strong>Order ID:</strong> <span id="orderId"></span></p>
+                                <p><strong>Date:</strong> <span id="orderDate"></span></p>
+                                <p><strong>Status:</strong> <span id="orderStatus" class="order-status status-pending">Pending</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4">Product Details</h5>
+                    <hr>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productDetailsBody">
+                                <!-- Product details will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="rejectOrderBtn">
+                        <i class="fas fa-times-circle me-2"></i>Reject
+                    </button>
+                    <button type="button" class="btn btn-success" id="acceptOrderBtn">
+                        <i class="fas fa-check-circle me-2"></i>Accept
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // DOM elements
+        const ordersTableBody = document.getElementById('ordersTableBody');
+        const orderDetailsModal = new bootstrap.Modal(document.getElementById('orderDetailsModal'));
+        let currentOrderId = null;
+        let ordersData = [];
+
+        // Format date
+        function formatDate(dateString) {
+            const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return new Date(dateString).toLocaleDateString(undefined, options);
+        }
+
+        // Get status class based on order status
+        function getStatusClass(status) {
+            switch (status.toLowerCase()) {
+                case 'accepted': return 'status-accepted';
+                case 'rejected': return 'status-rejected';
+                default: return 'status-pending';
+            }
+        }
+
+        // Render orders table
+        function renderOrdersTable() {
+            if (ordersData.length === 0) {
+                ordersTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-4">
+                            <i class="fas fa-box-open fa-2x mb-3 text-muted"></i>
+                            <h5>No orders found</h5>
+                            <p class="text-muted">You don't have any orders yet</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            ordersTableBody.innerHTML = '';
+            
+            ordersData.forEach(order => {
+                const row = document.createElement('tr');
+                row.className = 'order-row';
+                row.innerHTML = `
+                    <td>${order._id.substring(0, 8)}...</td>
+                    <td>${formatDate(order.createdAt)}</td>
+                    <td>${order.items.length} item(s)</td>
+                    <td>$${order.totalPrice.toFixed(2)}</td>
+                    <td><span class="order-status ${getStatusClass(order.status)}">${order.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary view-details-btn" data-order-id="${order._id}">
+                            <i class="fas fa-eye"></i> Details
+                        </button>
+                    </td>
+                `;
+                ordersTableBody.appendChild(row);
+            });
+
+            // Add event listeners to details buttons
+            document.querySelectorAll('.view-details-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const orderId = btn.getAttribute('data-order-id');
+                    showOrderDetails(orderId);
+                });
+            });
+
+            // Add click event to rows
+            document.querySelectorAll('.order-row').forEach(row => {
+                row.addEventListener('click', () => {
+                    const orderId = row.querySelector('.view-details-btn').getAttribute('data-order-id');
+                    showOrderDetails(orderId);
+                });
+            });
+        }
+
+        // Show order details in modal
+        function showOrderDetails(orderId) {
+            const order = ordersData.find(o => o._id === orderId);
+            if (!order) return;
+
+            currentOrderId = orderId;
+
+            // Set customer info
+            document.getElementById('customerName').textContent = 
+                `${order.contactInfo.firstName} ${order.contactInfo.middleName || ''} ${order.contactInfo.lastName}`.trim();
+            document.getElementById('customerPhone').textContent = order.contactInfo.phoneNumber || 'N/A';
+            document.getElementById('customerAddress').textContent = order.contactInfo.address || 'N/A';
+            document.getElementById('customerCity').textContent = order.contactInfo.city || 'N/A';
+
+            // Set order info
+            document.getElementById('orderId').textContent = order._id;
+            document.getElementById('orderDate').textContent = formatDate(order.createdAt);
+            const statusElement = document.getElementById('orderStatus');
+            statusElement.textContent = order.status;
+            statusElement.className = `order-status ${getStatusClass(order.status)}`;
+
+            // Set product details
+            const productDetailsBody = document.getElementById('productDetailsBody');
+            productDetailsBody.innerHTML = '';
+            
+            order.items.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.productName || 'Product ' + item.productId.substring(0, 6)}</td>
+                    <td>$${item.price.toFixed(2)}</td>
+                    <td>${item.quantity}</td>
+                    <td>$${(item.price * item.quantity).toFixed(2)}</td>
+                `;
+                productDetailsBody.appendChild(row);
+            });
+
+            // Show/hide action buttons based on status
+            const acceptBtn = document.getElementById('acceptOrderBtn');
+            const rejectBtn = document.getElementById('rejectOrderBtn');
+            
+            if (order.status.toLowerCase() === 'pending') {
+                acceptBtn.style.display = 'inline-block';
+                rejectBtn.style.display = 'inline-block';
+            } else {
+                acceptBtn.style.display = 'none';
+                rejectBtn.style.display = 'none';
+            }
+
+            // Show modal
+            orderDetailsModal.show();
+        }
+
+        // Handle accept order
+       document.getElementById('acceptOrderBtn').addEventListener('click', async () => {
+    if (!currentOrderId) return;
+    
+    try {
+        const response = await fetch(`http://localhost:5501/api/orders/accept/${currentOrderId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                // Add any other required headers here
+            },
+            // Add body if your API requires it
+            // body: JSON.stringify({ someData: 'value' })
+        });
+        
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log('Full API response:', result);
+        
+        if (result.success) {
+            // Update the order status locally
+            const orderIndex = ordersData.findIndex(o => o._id === currentOrderId);
+            if (orderIndex !== -1) {
+                ordersData[orderIndex].status = 'accepted';
+                renderOrdersTable();
+            }
+            orderDetailsModal.hide();
+            
+            // Show success toast/notification
+            showAlert('success', 'Order accepted successfully!');
+        } else {
+            throw new Error(result.message || 'Failed to accept order');
+        }
+    } catch (error) {
+        console.error('Error accepting order:', error);
+        showAlert('error', error.message || 'Error accepting order');
+    }
+});
+
+// Helper function for showing alerts (add this to your code)
+function showAlert(type, message) {
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert alert-${type} fixed-top mx-auto mt-3 w-50`;
+    alertDiv.style.zIndex = '1100';
+    alertDiv.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert"></button>
+    `;
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+        alertDiv.remove();
+    }, 5000);
+}    // Handle reject order
+        document.getElementById('rejectOrderBtn').addEventListener('click', async () => {
+            if (!currentOrderId) return;
+            
+            if (confirm('Are you sure you want to reject this order?')) {
+                try {
+                    const response = await fetch(`http://localhost:5501/api/orders/reject/${currentOrderId}`, {
+                        method: 'PATCH'
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        if (result.success) {
+                            // Update the order status locally
+                            const orderIndex = ordersData.findIndex(o => o._id === currentOrderId);
+                            if (orderIndex !== -1) {
+                                ordersData[orderIndex].status = 'rejected';
+                                renderOrdersTable();
+                            }
+                            orderDetailsModal.hide();
+                            alert('Order rejected successfully!');
+                        } else {
+                            alert(result.message || 'Failed to reject order');
+                        }
+                    } else {
+                        const error = await response.json();
+                        alert(error.message || 'Failed to reject order');
+                    }
+                } catch (error) {
+                    console.error('Error rejecting order:', error);
+                    alert('Error rejecting order: ' + error.message);
+                }
+            }
+        });
+
+        // Fetch orders from API
+        async function fetchOrders() {
+            try {
+                // API endpoint with your seller ID
+                const apiUrl = 'http://localhost:5501/api/orders/getsellerorders/685996470f5011dcf7997e3d';
+                
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    throw new Error(data.message || 'Failed to fetch orders');
+                }
+                
+                // Update orders data and re-render table
+                ordersData = data.orders || [];
+                renderOrdersTable();
+                
+            } catch (error) {
+                console.error('Error fetching orders:', error);
+                // Show error message
+                ordersTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-4 text-danger">
+                            <i class="fas fa-exclamation-triangle fa-2x mb-3"></i>
+                            <h5>Error loading orders</h5>
+                            <p>${error.message}</p>
+                            <button class="btn btn-sm btn-outline-primary" onclick="fetchOrders()">
+                                <i class="fas fa-sync-alt me-2"></i>Try Again
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchOrders();
+        });
+    </script>
+</body>
+</html>
