@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Registration - Takatof</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/logo.png" rel="icon">
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500&family=Lora:wght@600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+
+
+
+
+    <style>
+        body {
+            background: url('img/carousel-1.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group input {
+            border-radius: 15px;
+        }
+
+        .gender-group {
+            margin-bottom: 15px;
+        }
+
+        .gender-group label {
+            margin-right: 20px;
+        }
+
+        .btn-primary {
+            border-radius: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" role="status"></div>
+        <img src="img/logo.png" alt="Takatof Logo" class="img-fluid" style="max-height: 50px;">
+    </div>
+    <!-- Spinner End -->
+
+    <!-- Navbar Start -->
+
+
+    <nav class="navbar navbar-expand-lg navbar-light py-lg-0 px-lg-5 wow fadeIn" data-wow-delay="0.1s">
+        <a href="index.html" class="navbar-brand ms-4 ms-lg-0">
+            <img src="img/logo.png" alt="Takatof Logo" class="img-fluid" style="max-height: 50px;">
+        </a>
+        <button type="button" class="navbar-toggler me-4" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-left" id="navbarCollapse">
+            <div class="navbar-nav p-4 p-lg-0">
+                <a href="index.html" class="nav-item nav-link active">Home</a>
+                <a href="product.html" class="nav-item nav-link">Products</a>
+                <a href="about.html" class="nav-item nav-link">About Us</a>
+                <a href="Consultation.html" class="nav-item nav-link">Contact Us</a>
+            </div>
+        </div>
+        <div class="d-none d-lg-flex ms-auto">
+
+            <a class="btn-sm-square bg-white rounded-circle ms-3" id="user-icon" title="Account Settings">
+                <small class="fa fa-user text-body"></small>
+            </a>
+        </div>
+    </nav>
+
+    </div>
+    <!-- Navbar End -->
+
+
+
+    <!-- Registration Start -->
+    <div class="container bg-light p-4 mt-5 rounded">
+        <h2 class="mb-4">Create an Account</h2>
+        <form id="signup-form" action="#" method="post">
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control" placeholder="First Name">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control" placeholder="Middle Name">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                        <input type="text" class="form-control" placeholder="Last Name">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                    <input type="email" class="form-control" placeholder="Email Address">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col">
+                    <div class="password-group">
+                        <div class="input-group flex-grow-1">
+                            <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                            <input type="password" class="form-control" id="password" placeholder="Password">
+                        </div>
+                        <input type="checkbox" id="show-password"> <label for="show-password">Show</label>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input type="password" class="form-control" placeholder="Confirm Password">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                    <input type="text" class="form-control" placeholder="ID Number">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                    <input type="text" class="form-control" placeholder="Phone Number">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                    <input type="text" class="form-control" placeholder="City">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Gender</label>
+                <div class="gender-group">
+                    <label><input type="radio" name="gender" value="male"> Male</label>
+                    <label><input type="radio" name="gender" value="female"> Female</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" id="terms">
+                    <label class="form-check-label" for="terms">
+                        I agree to the
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#termsModal">terms and conditions</a>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Terms and Conditions Modal -->
+            <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content" style="border-radius: 10px;">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+                            <button type="button" class="btn-close btn" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>
+                                <!-- Replace the text below with your actual terms and conditions -->
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisi vel
+                                consectetur
+                                cursus, enim erat iaculis felis, at elementum sapien nisl ac urna. Proin vel mauris ut
+                                mi
+                                scelerisque sodales.
+                            </p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Register</button>
+            <p id="signup-error" style="display: none; color: red;"></p>
+            <p class="mt-3">Already have an account? <a href="login.html">Log in</a></p>
+        </form>
+    </div>
+    <!-- Registration End -->
+
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
+            class="bi bi-arrow-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+    <script>
+        const signupUser = async () => {
+            const form = document.getElementById("signup-form");
+
+            // Get form data
+            const firstName = form.querySelector('input[placeholder="First Name"]').value;
+            const middleName = form.querySelector('input[placeholder="Middle Name"]').value;
+            const lastName = form.querySelector('input[placeholder="Last Name"]').value;
+            const email = form.querySelector('input[placeholder="Email Address"]').value;
+            const password = form.querySelector('input[placeholder="Password"]').value;
+            const confirmPassword = form.querySelector('input[placeholder="Confirm Password"]').value;
+            const idNumber = form.querySelector('input[placeholder="ID Number"]').value;
+            const phoneNumber = form.querySelector('input[placeholder="Phone Number"]').value;
+            const city = form.querySelector('input[placeholder="City"]').value;
+            const gender = form.querySelector('input[name="gender"]:checked')?.value; // Get selected gender
+            const termsAccepted = form.querySelector("#terms").checked;
+
+            console.log({
+                firstName,
+                middleName,
+                lastName,
+                email,
+                password,
+                idNumber,
+                phoneNumber,
+                city,
+                gender,
+            });
+
+            // Clear previous error message
+            const errorElement = document.getElementById("signup-error");
+            errorElement.style.display = "none";
+
+            // Validate the form data
+            if (!firstName || !lastName || !email || !password || !confirmPassword || !idNumber || !phoneNumber || !city || !gender || !termsAccepted) {
+                errorElement.textContent = "Please fill out all fields and accept the terms.";
+                errorElement.style.display = "block";
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                errorElement.textContent = "Passwords do not match.";
+                errorElement.style.display = "block";
+                return;
+            }
+
+            const signupEndpoint = "http://localhost:5501/api/auth/signUp";
+
+            try {
+                const response = await fetch(signupEndpoint, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        firstName,
+                        middleName,
+                        lastName,
+                        email,
+                        password,
+                        idNumber,
+                        phoneNumber,
+                        city,
+                        gender,
+                    }),
+                });
+
+                const data = await response.json(); // Parse the response as JSON
+
+                if (response.ok) {
+                    // Successful registration
+                    console.log("Registration successful:", data);
+                    errorElement.textContent = "Registration successful";
+                    errorElement.style.display = "block";
+                    errorElement.style.color = "green";
+                    form.reset();
+                    // window.location.href = "/dashboard";
+                } else {
+
+                    console.error("Registration failed:", data.message || "Unknown error");
+                    errorElement.textContent = data.message || "Registration failed. Please try again.";
+                    errorElement.style.display = "block";
+                }
+            } catch (error) {
+                console.error("Error during signup:", error);
+                errorElement.textContent = "An error occurred. Please try again later.";
+                errorElement.style.display = "block"; // Show error message
+            }
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Add event listener for form submission
+            document.getElementById("signup-form").addEventListener("submit", (event) => {
+                event.preventDefault();
+                signupUser();
+            });
+
+            // Toggle password visibility
+            document.getElementById('show-password').addEventListener('change', function () {
+                var passwordField = document.getElementById('password');
+                if (this.checked) {
+                    passwordField.type = 'text';
+                } else {
+                    passwordField.type = 'password';
+                }
+            });
+        });
+    </script>
+
+</body>
+
+</html>
